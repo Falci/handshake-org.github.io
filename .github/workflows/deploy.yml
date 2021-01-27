@@ -40,13 +40,14 @@ jobs:
           do
             arr+=$(basename "$file" | cut -d. -f1)
           done
-          echo ::set-output name=SRC::${{toJSON(arr[@])}}
+          echo ::set-output name=SRC::${{toJSON($arr[@])}}
+
           arr=()
           for file in ./src/guides/*.md
           do
             arr+=$(basename "$file" | cut -d. -f1)
           done
-          echo ::set-output name=GUIDES::${{toJSON(arr[@])}}
+          echo ::set-output name=SRC::${{toJSON($arr[@])}}
 
     - run: echo ${{fromJSON(steps.files.outputs.SRC)}}
     - run: echo ${{fromJSON(steps.files.outputs.GUIDES)}}
