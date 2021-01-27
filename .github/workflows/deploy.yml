@@ -49,7 +49,7 @@ jobs:
             arr='"'$(basename "$file" | cut -d. -f1)'",'$arr
           done
           arr=$(echo $arr | cut -d. -f1)
-          echo ::set-output name=SRC::[$arr]
+          echo ::set-output name=GUIDES::[$arr]
 
     - run: echo ${{fromJSON(steps.files.outputs.SRC)}}
     - run: echo ${{fromJSON(steps.files.outputs.GUIDES)}}
