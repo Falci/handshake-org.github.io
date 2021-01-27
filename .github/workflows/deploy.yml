@@ -28,7 +28,19 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-    - name: Build Site
-      run: ./bin/build
-    - name: Build JSDocs
-      run: ./bin/build-docs
+
+    - run: |
+        mkdir -p ./{install,guides}
+
+    - name: src
+      run: |
+          arr=()
+          for file in ./src/*.md
+          do
+            arr+=$(basename "$file" | cut -d. -f1)
+          done
+          echo "::set-env name=FILELIST::$arr"
+
+    - uses: docker://pandoc/latex:2.9
+      with:
+        args: ${{ env.FILELIST }}.md -T ${{ env.FILELIST }} -V "active-${{ env.FILELIST }}:true" -V "ghpath:${{ env.FILELIST }}" -V "pagetitle:${{ env.FILELIST }}" -w html5 -o "${{ env.FILELIST }}.html" --template ./src/templates/layout.html
