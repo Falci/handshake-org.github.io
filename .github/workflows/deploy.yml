@@ -40,9 +40,9 @@ jobs:
           do
             arr+=$(basename "$file" | cut -d. -f1)
           done
-          echo ::set-output name=FILELIST::${arr[@]}
+          echo ::set-output name=FILELIST::${{toJSON(${arr[@]})}}
 
-    - run: echo ${{ steps.src.outputs.FILELIST }}
+    - run: echo ${{fromJSON(steps.src.outputs.FILELIST)}}
     - uses: docker://pandoc/latex:2.9
       with:
-        args: ${{ steps.src.outputs.FILELIST }}.md -T ${{ steps.src.outputs.FILELIST }} -V "active-${{ steps.src.outputs.FILELIST }}:true" -V "ghpath:${{ steps.src.outputs.FILELIST }}" -V "pagetitle:${{ steps.src.outputs.FILELIST }}" -w html5 -o "${{ steps.src.outputs.FILELIST }}.html" --template ./src/templates/layout.html
+        args: ${{fromJSON(steps.src.outputs.FILELIST)}}.md -T ${{fromJSON(steps.src.outputs.FILELIST)}} -V "active-${{fromJSON(steps.src.outputs.FILELIST)}}:true" -V "ghpath:${{fromJSON(steps.src.outputs.FILELIST)}}" -V "pagetitle:${{fromJSON(steps.src.outputs.FILELIST)}}" -w html5 -o "${{fromJSON(steps.src.outputs.FILELIST)}}.html" --template ./src/templates/layout.html
