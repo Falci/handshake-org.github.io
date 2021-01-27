@@ -4,7 +4,8 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.files.outputs.matrix }}
+      src: ${{ steps.files.outputs.src }}
+      guides: ${{ steps.files.outputs.guides }}
 
     steps:
     - uses: actions/checkout@v2
@@ -26,13 +27,14 @@ jobs:
             arr='"'$(basename "$file" | cut -d. -f1)'",'$arr
           done
           guides=$(echo $arr | cut -d. -f1)
-          echo "::set-output name=matrix::{\"src\":{\"file\": [$src]},\"guides\":{\"file\": [$guides]}}"
+          echo "::set-output name=src::{\"file\":[$src]}"
+          echo "::set-output name=guides::{\"file\":[$guides]}"
 
   job2:
     needs: job1
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJson(needs.job1.outputs.matrix).src}}
+      matrix: ${{fromJson(needs.job1.outputs.src)}}
     steps:
     - uses: docker://pandoc/latex:2.9
       with:
