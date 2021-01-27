@@ -11,6 +11,8 @@ jobs:
     - name: Files
       id: files
       run: |
+          mkdir -p ./{install,guides}
+
           arr=""
           for file in ./src/*.md
           do
@@ -32,5 +34,6 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.job1.outputs.matrix)}}
     steps:
-    - run: echo ${{ matrix.src }}
-    - run: echo ${{ matrix.guides }}
+    - uses: docker://pandoc/latex:2.9
+      with:
+        args: ${{ matrix.src }}.md -T ${{ matrix.src }} -V "active-${{ matrix.src }}:true" -V "ghpath:${{ matrix.src }}" -V "pagetitle:${{ matrix.src }}" -w html5 -o "${{ matrix.src }}.html" --template ./src/templates/layout.html
