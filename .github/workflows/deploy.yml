@@ -1,37 +1,12 @@
-# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
-# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
-
-name: Deploy Docs
-
-on:
-  push:
-    # branches: [ master ]
-  pull_request:
-    # branches: [ master ]
-
+name: build
+on: push
 jobs:
-  test:
-
+  job1:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby-version: ['3.0']
+    outputs:
+      matrix: ${{ steps.files.outputs.matrix }}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-    # change this to (see https://github.com/ruby/setup-ruby#versioning):
-    # uses: ruby/setup-ruby@v1
-      uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
-
-    - run: |
-        mkdir -p ./{install,guides}
-
     - name: Files
       id: files
       run: |
@@ -40,19 +15,21 @@ jobs:
           do
             arr='"'$(basename "$file" | cut -d. -f1)'",'$arr
           done
-          arr=$(echo $arr | cut -d. -f1)
-          echo ::set-output name=SRC::[$arr]
+          src=$(echo $arr | cut -d. -f1)
 
           arr=""
           for file in ./src/guides/*.md
           do
             arr='"'$(basename "$file" | cut -d. -f1)'",'$arr
           done
-          arr=$(echo $arr | cut -d. -f1)
-          echo ::set-output name=GUIDES::[$arr]
+          guides=$(echo $arr | cut -d. -f1)
+          echo "::set-output name=matrix::{\"src\":[$src],\"guides\":[$guides]}"
 
-    - run: echo ${{fromJSON(steps.files.outputs.SRC)}}
-    - run: echo ${{fromJSON(steps.files.outputs.GUIDES)}}
-    - uses: docker://pandoc/latex:2.9
-      with:
-        args: ${{fromJSON(steps.files.outputs.SRC)}}.md -T ${{fromJSON(steps.files.outputs.SRC)}} -V "active-${{fromJSON(steps.files.outputs.SRC)}}:true" -V "ghpath:${{fromJSON(steps.files.outputs.SRC)}}" -V "pagetitle:${{fromJSON(steps.files.outputs.SRC)}}" -w html5 -o "${{fromJSON(steps.files.outputs.SRC)}}.html" --template ./src/templates/layout.html
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.job1.outputs.matrix)}}
+    steps:
+    - run: echo ${{ matrix.src }}
+    - run: echo ${{ matrix.guides }}
