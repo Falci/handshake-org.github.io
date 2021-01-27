@@ -26,15 +26,14 @@ jobs:
             arr='"'$(basename "$file" | cut -d. -f1)'",'$arr
           done
           guides=$(echo $arr | cut -d. -f1)
-          echo "::set-output name=matrix::{\"src\":[$src],\"guides\":[$guides]}"
+          echo "::set-output name=matrix::{\"src\":{\"file\": [$src]},\"guides\":{\"file\": [$guides]}}"
 
   job2:
     needs: job1
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        src: ${{fromJson(needs.job1.outputs.matrix).src}}
+      matrix: ${{fromJson(needs.job1.outputs.matrix).src}}
     steps:
     - uses: docker://pandoc/latex:2.9
       with:
-        args: ./src/${{ matrix.src }}.md -T ${{ matrix.src }} -V "active-${{ matrix.src }}:true" -V "ghpath:${{ matrix.src }}" -V "pagetitle:${{ matrix.src }}" -w html5 -o "${{ matrix.src }}.html" --template ./src/templates/layout.html
+        args: ./src/${{ matrix.file }}.md -T ${{ matrix.file }} -V "active-${{ matrix.file }}:true" -V "ghpath:${{ matrix.file }}" -V "pagetitle:${{ matrix.file }}" -w html5 -o "${{ matrix.file }}.html" --template ./src/templates/layout.html
