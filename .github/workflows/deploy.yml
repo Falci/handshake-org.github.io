@@ -36,6 +36,7 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.job1.outputs.src)}}
     steps:
+    - uses: actions/checkout@v2
     - uses: docker://pandoc/latex:2.9
       with:
         args: ./src/${{ matrix.file }}.md -T ${{ matrix.file }} -V "active-${{ matrix.file }}:true" -V "ghpath:${{ matrix.file }}" -V "pagetitle:${{ matrix.file }}" -w html5 -o "${{ matrix.file }}.html" --template ./src/templates/layout.html
@@ -45,10 +46,7 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.job1.outputs.guides)}}
     steps:
-    - run: pwd
-    - run: ls
-    - run: ls ./src
-    - run: ls ./src/templates
+    - uses: actions/checkout@v2
     - uses: docker://pandoc/latex:2.9
       with:
         args: ./src/guides/${{ matrix.file }}.md -T ${{ matrix.file }} -V "active-guides-${{ matrix.file }}:true" -V "ghpath:guides/${{ matrix.file }}" -V "pagetitle:${{ matrix.file }}" -w html5 -o ./guides/"${{ matrix.file }}.html" --template ./src/templates/layout.html
