@@ -30,7 +30,7 @@ jobs:
           echo "::set-output name=src::{\"file\":[$src]}"
           echo "::set-output name=guides::{\"file\":[$guides]}"
 
-  job2:
+  pandoc1:
     needs: job1
     runs-on: ubuntu-latest
     strategy:
@@ -39,3 +39,16 @@ jobs:
     - uses: docker://pandoc/latex:2.9
       with:
         args: ./src/${{ matrix.file }}.md -T ${{ matrix.file }} -V "active-${{ matrix.file }}:true" -V "ghpath:${{ matrix.file }}" -V "pagetitle:${{ matrix.file }}" -w html5 -o "${{ matrix.file }}.html" --template ./src/templates/layout.html
+  pandoc2:
+    needs: job1
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.job1.outputs.guides)}}
+    steps:
+    - run: pwd
+    - run: ls
+    - run: ls ./src
+    - run: ls ./src/templates
+    - uses: docker://pandoc/latex:2.9
+      with:
+        args: ./src/guides/${{ matrix.file }}.md -T ${{ matrix.file }} -V "active-guides-${{ matrix.file }}:true" -V "ghpath:guides/${{ matrix.file }}" -V "pagetitle:${{ matrix.file }}" -w html5 -o ./guides/"${{ matrix.file }}.html" --template ./src/templates/layout.html
