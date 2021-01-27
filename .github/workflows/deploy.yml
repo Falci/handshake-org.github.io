@@ -7,6 +7,7 @@ jobs:
       matrix: ${{ steps.files.outputs.matrix }}
 
     steps:
+    - uses: actions/checkout@v2
     - name: Files
       id: files
       run: |
