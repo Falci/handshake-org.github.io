@@ -33,15 +33,16 @@ jobs:
         mkdir -p ./{install,guides}
 
     - name: src
+      id: src
       run: |
           arr=()
           for file in ./src/*.md
           do
             arr+=$(basename "$file" | cut -d. -f1)
           done
-          echo "FILELIST=$arr" >> $GITHUB_ENV
+          echo ::set-output name=FILELIST::${arr[@]}
 
-    - run: echo ${{ env.FILELIST }}
+    - run: echo ${{ steps.src.outputs.FILELIST }}
     - uses: docker://pandoc/latex:2.9
       with:
-        args: ${{ env.FILELIST }}.md -T ${{ env.FILELIST }} -V "active-${{ env.FILELIST }}:true" -V "ghpath:${{ env.FILELIST }}" -V "pagetitle:${{ env.FILELIST }}" -w html5 -o "${{ env.FILELIST }}.html" --template ./src/templates/layout.html
+        args: ${{ steps.src.outputs.FILELIST }}.md -T ${{ steps.src.outputs.FILELIST }} -V "active-${{ steps.src.outputs.FILELIST }}:true" -V "ghpath:${{ steps.src.outputs.FILELIST }}" -V "pagetitle:${{ steps.src.outputs.FILELIST }}" -w html5 -o "${{ steps.src.outputs.FILELIST }}.html" --template ./src/templates/layout.html
