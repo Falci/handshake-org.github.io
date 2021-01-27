@@ -32,17 +32,24 @@ jobs:
     - run: |
         mkdir -p ./{install,guides}
 
-    - name: src
-      id: src
+    - name: Files
+      id: files
       run: |
           arr=()
           for file in ./src/*.md
           do
             arr+=$(basename "$file" | cut -d. -f1)
           done
-          echo ::set-output name=FILELIST::${{toJSON(${arr[@]})}}
+          echo ::set-output name=SRC::${{toJSON(arr[@])}}
+          arr=()
+          for file in ./src/guides/*.md
+          do
+            arr+=$(basename "$file" | cut -d. -f1)
+          done
+          echo ::set-output name=GUIDES::${{toJSON(arr[@])}}
 
-    - run: echo ${{fromJSON(steps.src.outputs.FILELIST)}}
+    - run: echo ${{fromJSON(steps.files.outputs.SRC)}}
+    - run: echo ${{fromJSON(steps.files.outputs.GUIDES)}}
     - uses: docker://pandoc/latex:2.9
       with:
-        args: ${{fromJSON(steps.src.outputs.FILELIST)}}.md -T ${{fromJSON(steps.src.outputs.FILELIST)}} -V "active-${{fromJSON(steps.src.outputs.FILELIST)}}:true" -V "ghpath:${{fromJSON(steps.src.outputs.FILELIST)}}" -V "pagetitle:${{fromJSON(steps.src.outputs.FILELIST)}}" -w html5 -o "${{fromJSON(steps.src.outputs.FILELIST)}}.html" --template ./src/templates/layout.html
+        args: ${{fromJSON(steps.files.outputs.SRC)}}.md -T ${{fromJSON(steps.files.outputs.SRC)}} -V "active-${{fromJSON(steps.files.outputs.SRC)}}:true" -V "ghpath:${{fromJSON(steps.files.outputs.SRC)}}" -V "pagetitle:${{fromJSON(steps.files.outputs.SRC)}}" -w html5 -o "${{fromJSON(steps.files.outputs.SRC)}}.html" --template ./src/templates/layout.html
