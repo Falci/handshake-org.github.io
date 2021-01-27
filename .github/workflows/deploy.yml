@@ -44,4 +44,4 @@ jobs:
     - run: echo ${{ GITHUB_ENV.FILELIST }}
     - uses: docker://pandoc/latex:2.9
       with:
-        args: ${{ GITHUB_ENV.FILELIST }}.md -T ${{ GITHUB_ENV.FILELIST }} -V "active-${{ GITHUB_ENV.FILELIST }}:true" -V "ghpath:${{ GITHUB_ENV.FILELIST }}" -V "pagetitle:${{ GITHUB_ENV.FILELIST }}" -w html5 -o "${{ GITHUB_ENV.FILELIST }}.html" --template ./src/templates/layout.html
+        args: ${{ env.FILELIST }}.md -T ${{ env.FILELIST }} -V "active-${{ env.FILELIST }}:true" -V "ghpath:${{ env.FILELIST }}" -V "pagetitle:${{ env.FILELIST }}" -w html5 -o "${{ env.FILELIST }}.html" --template ./src/templates/layout.html
