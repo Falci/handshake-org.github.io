@@ -32,8 +32,8 @@ jobs:
     needs: job1
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJson(needs.job1.outputs.matrix)}}
+      matrix: ${{fromJson(needs.job1.outputs.matrix).src}}
     steps:
     - uses: docker://pandoc/latex:2.9
       with:
-        args: ${{ matrix.src }}.md -T ${{ matrix.src }} -V "active-${{ matrix.src }}:true" -V "ghpath:${{ matrix.src }}" -V "pagetitle:${{ matrix.src }}" -w html5 -o "${{ matrix.src }}.html" --template ./src/templates/layout.html
+        args: ./src/${{ matrix.src }}.md -T ${{ matrix.src }} -V "active-${{ matrix.src }}:true" -V "ghpath:${{ matrix.src }}" -V "pagetitle:${{ matrix.src }}" -w html5 -o "${{ matrix.src }}.html" --template ./src/templates/layout.html
