@@ -41,7 +41,7 @@ jobs:
           done
           echo "FILELIST=$arr" >> $GITHUB_ENV
 
-    - run: echo ${{ GITHUB_ENV.FILELIST }}
+    - run: echo ${{ env.FILELIST }}
     - uses: docker://pandoc/latex:2.9
       with:
         args: ${{ env.FILELIST }}.md -T ${{ env.FILELIST }} -V "active-${{ env.FILELIST }}:true" -V "ghpath:${{ env.FILELIST }}" -V "pagetitle:${{ env.FILELIST }}" -w html5 -o "${{ env.FILELIST }}.html" --template ./src/templates/layout.html
