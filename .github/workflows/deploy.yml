@@ -35,19 +35,21 @@ jobs:
     - name: Files
       id: files
       run: |
-          arr=()
+          arr=""
           for file in ./src/*.md
           do
-            arr+=$(basename "$file" | cut -d. -f1)
+            arr='"'$(basename "$file" | cut -d. -f1)'",'$arr
           done
-          echo ::set-output name=SRC::${{toJSON($arr[@])}}
+          arr=$(echo $arr | cut -d. -f1)
+          echo ::set-output name=SRC::[$arr]
 
-          arr=()
+          arr=""
           for file in ./src/guides/*.md
           do
-            arr+=$(basename "$file" | cut -d. -f1)
+            arr='"'$(basename "$file" | cut -d. -f1)'",'$arr
           done
-          echo ::set-output name=SRC::${{toJSON($arr[@])}}
+          arr=$(echo $arr | cut -d. -f1)
+          echo ::set-output name=SRC::[$arr]
 
     - run: echo ${{fromJSON(steps.files.outputs.SRC)}}
     - run: echo ${{fromJSON(steps.files.outputs.GUIDES)}}
