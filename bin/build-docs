@@ -11,21 +11,16 @@ set -e
 cd `dirname $0`
 cd ../
 
-destDir=./build
-buildDir=`mktemp -d`
-trap "rm -rf $buildDir" EXIT
 
-echo "cloning git@github.com:handshake-org/hsd.git"
-git clone git@github.com:handshake-org/hsd.git $buildDir
-cd $buildDir
+echo "Ppdating git@github.com:handshake-org/hsd.git"
+git submodule update --init --recursive
 
-if [ "$1" ]; then
-  git checkout "$1"
-fi
-
-echo "building docs"
-rm -rf docs
+echo "Building docs"
+cd ./hsd
+rm -rf hsd/docs
 jsdoc -c jsdoc.json
-cd $destDir
-rm -rf ./docs
-cp -r "$buildDir/docs/reference" ./docs
+cd ..
+
+echo "Copying docs"
+rm -rf ./build/docs
+cp -r ./hsd/docs/reference ./build/docs
