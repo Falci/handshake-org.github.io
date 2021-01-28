@@ -30,15 +30,4 @@ echo 'building api documentation...'
 cd ./src/api-docs
 bundle install
 bundle exec middleman build --clean --build-dir=../../build/api-docs
-cd ../..
-
-cd hsd
-
-echo "Installing JSDoc"
-npm install
-## hsd should have this
-npm install -D jsdoc node-gyp
-echo "Runnining JSDoc"
-node node_modules/.bin/jsdoc -c jsdoc.json
-ls -lha ./docs/reference
-cp ./docs/reference ../build/docs
+cd ..
