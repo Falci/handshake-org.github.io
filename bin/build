@@ -5,8 +5,6 @@ set -e
 cd `dirname $0`
 cd ../
 
-echo `pwd`
-exit 0
 # convert .md to .html files
 echo 'converting markdown files to html...'
 
