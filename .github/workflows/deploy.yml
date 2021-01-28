@@ -20,6 +20,7 @@ jobs:
     - name: HSD jsdocs
       uses: andstor/jsdoc-action@v1
       with:
+        source_dir: ./hsd
         config_file: ./hsd/jsdoc.json
         output_dir: ./build/docs
     - run: ls -lha build
