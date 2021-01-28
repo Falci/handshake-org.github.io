@@ -1,0 +1,3 @@
+[submodule "hsd"]
+	path = hsd
+	url = git@github.com:handshake-org/hsd.git
