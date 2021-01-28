@@ -7,8 +7,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        submodules: true # fetches hsd
     - uses: r-lib/actions/setup-pandoc@v1
       with:
         pandoc-version: '2.7.3'
@@ -18,6 +16,16 @@ jobs:
         bundler-cache: true
 
     - run: ./bin/build
+    - uses: actions/checkout@v2
+      with:
+        repository: 'git@github.com:handshake-org/hsd.git'
+        path: hsd
+    - run: |
+        cd hsd
+        npm i -g jsdoc
+        npm i
+        jsdoc -c jsdoc.json
+        cp -r ./docs/reference ../build/docs
     - run: ls -lha build/docs
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
