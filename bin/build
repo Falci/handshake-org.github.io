@@ -16,14 +16,12 @@ ls -lha build
 for file in ./src/*.md
 do
     PREFIX=$(basename "$file" | cut -d. -f1)
-    echo "Processing $PREFIX = '$file'"
     pandoc $file -T $PREFIX -V "active-$PREFIX:true" -V "ghpath:$PREFIX" -V "pagetitle:$PREFIX" -w html5 -o "./build/$PREFIX.html" --template ./src/templates/layout.html
 done
 
 for file in ./src/guides/*.md
 do
     PREFIX=$(basename "$file" | cut -d. -f1)
-    echo "Processing $PREFIX = '$file'"
     pandoc $file -T $PREFIX -V "active-guides-$PREFIX:true" -V "ghpath:guides/$PREFIX" -V "pagetitle:$PREFIX" -w html5 -o "./build/guides/$PREFIX.html" --template ./src/templates/layout.html
 done
 echo 'finished'

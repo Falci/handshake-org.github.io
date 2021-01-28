@@ -2,6 +2,7 @@ name: build
 on: push
 jobs:
   job1:
+    name: Build docs
     runs-on: ubuntu-latest
 
     steps:
@@ -20,10 +21,10 @@ jobs:
     - name: HSD jsdocs
       uses: andstor/jsdoc-action@v1
       with:
-        source_dir: ./hsd
         config_file: ./hsd/jsdoc.json
+        source_dir: ./hsd/lib
         output_dir: ./build/docs
-    - run: ls -lha build
+    - run: ls -lha build/docs
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
