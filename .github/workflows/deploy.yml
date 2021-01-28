@@ -18,7 +18,8 @@ jobs:
     - run: ./bin/build
     - uses: actions/checkout@v2
       with:
-        repository: 'git@github.com:handshake-org/hsd.git'
+        repository: falci/hsd
+        ref: fix-docs
         path: hsd
     - run: |
         cd hsd
