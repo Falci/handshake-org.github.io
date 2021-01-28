@@ -11,7 +11,6 @@ echo 'converting markdown files to html...'
 mkdir -p ./build/install
 mkdir -p ./build/guides
 cp -r ./static/* ./build
-ls -lha build
 
 for file in ./src/*.md
 do
@@ -33,3 +32,11 @@ echo 'building api documentation...'
 cd ./src/api-docs
 bundle install
 bundle exec middleman build --clean --build-dir=../../build/api-docs
+cd ../..
+
+cd hsd
+npm install
+## hsd should have this
+npm install -D jsdoc
+node node_modules/jsdoc -c jsdoc.json
+cp ./docs/reference ../build/docs
