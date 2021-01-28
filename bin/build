@@ -39,6 +39,6 @@ npm install
 ## hsd should have this
 npm install -D jsdoc node-gyp
 echo "Runnining JSDoc"
-node node_modules/jsdoc -c jsdoc.json
+node node_modules/.bin/jsdoc -c jsdoc.json
 ls -lha ./docs/reference
 cp ./docs/reference ../build/docs
