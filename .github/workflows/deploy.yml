@@ -17,7 +17,11 @@ jobs:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
     - run: ./bin/build
-    - run: ./bin/build-docs
+    - name: HSD jsdocs
+      uses: andstor/jsdoc-action@v1
+      with:
+        config_file: ./hsd/jsdoc.json
+        output_dir: ./build/docs
     - run: ls -lha build
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
