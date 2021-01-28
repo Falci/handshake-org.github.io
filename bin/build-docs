@@ -11,7 +11,7 @@ set -e
 cd `dirname $0`
 cd ../
 
-destDir=`pwd`
+destDir=./build
 buildDir=`mktemp -d`
 trap "rm -rf $buildDir" EXIT
 
