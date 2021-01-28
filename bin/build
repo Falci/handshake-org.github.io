@@ -8,7 +8,8 @@ cd ../
 # convert .md to .html files
 echo 'converting markdown files to html...'
 
-mkdir -p ./build/{install,guides}
+mkdir -p ./build/install
+mkdir -p ./build/guides
 cp -r ./static/* ./build
 ls -lha build
 
