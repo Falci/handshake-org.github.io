@@ -25,7 +25,6 @@ do
 done
 echo 'finished'
 
-exit 0;
 
 # build API documentation
 echo 'building api documentation...'
