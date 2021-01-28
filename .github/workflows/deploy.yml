@@ -23,9 +23,9 @@ jobs:
         path: hsd
     - run: |
         cd hsd
-        npm i -g jsdoc
         npm i
-        jsdoc -c jsdoc.json
+        npm i -D jsdoc
+        node node_modules/.bin/jsdoc -c jsdoc.json
         cp -r ./docs/reference ../build/docs
     - run: ls -lha build/docs
     - name: Deploy
