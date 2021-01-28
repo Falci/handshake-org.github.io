@@ -5,12 +5,14 @@ set -e
 cd `dirname $0`
 cd ../
 
+echo `pwd`
+exit 0
 # convert .md to .html files
 echo 'converting markdown files to html...'
 
 rm -rf ./build
-cp -r ./static/* ./build
 mkdir -p ./build/{install,guides}
+cp -r ./static/* ./build
 
 for file in ./src/*.md
 do
