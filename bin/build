@@ -25,7 +25,6 @@ do
 done
 echo 'finished'
 
-
 # build API documentation
 echo 'building api documentation...'
 cd ./src/api-docs
@@ -38,7 +37,7 @@ cd hsd
 echo "Installing JSDoc"
 npm install
 ## hsd should have this
-npm install -D jsdoc
+npm install -D jsdoc node-gyp
 echo "Runnining JSDoc"
 node node_modules/jsdoc -c jsdoc.json
 ls -lha ./docs/reference
