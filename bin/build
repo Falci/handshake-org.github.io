@@ -8,9 +8,9 @@ cd ../
 # convert .md to .html files
 echo 'converting markdown files to html...'
 
-rm -rf ./build
 mkdir -p ./build/{install,guides}
 cp -r ./static/* ./build
+ls -lha build
 
 for file in ./src/*.md
 do

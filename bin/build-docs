@@ -11,13 +11,9 @@ set -e
 cd `dirname $0`
 cd ../
 
-
-echo "Ppdating git@github.com:handshake-org/hsd.git"
-git submodule update --init --recursive
-
 echo "Building docs"
 cd ./hsd
-rm -rf hsd/docs
+rm -rf ./docs
 jsdoc -c jsdoc.json
 cd ..
 

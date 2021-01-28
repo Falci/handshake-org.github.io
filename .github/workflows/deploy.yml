@@ -6,6 +6,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: true
     - uses: r-lib/actions/setup-pandoc@v1
       with:
         pandoc-version: '2.7.3'
